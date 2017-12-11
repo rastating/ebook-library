@@ -14,6 +14,10 @@ group :cli do
   gem 'colorize', '>=0.8.1'
 end
 
+group :media do
+  gem 'epubinfo', '0.4.4'
+end
+
 group :development do
   gem 'sqlite3', '~>1.3.13'
 end
