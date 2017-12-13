@@ -18,6 +18,10 @@ group :media do
   gem 'epubinfo', '0.4.4'
 end
 
+group :misc  do
+  gem 'sucker_punch', '~> 2.0'
+end
+
 group :development do
   gem 'sqlite3', '~>1.3.13'
 end
