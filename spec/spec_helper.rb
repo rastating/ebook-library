@@ -2,12 +2,16 @@ ENV['RACK_ENV'] = 'test'
 $VERBOSE = nil
 
 require_relative '../env'
+
 require_relative '../app/models/book'
 require_relative '../app/models/author'
 require_relative '../app/models/subject'
 require_relative '../app/models/identifier'
 require_relative '../app/models/date'
 require_relative '../app/models/setting'
+
+require_relative '../app/helpers/setting_helper'
+require_relative '../app/helpers/cover_helper'
 
 require 'rack/test'
 require 'rspec'
