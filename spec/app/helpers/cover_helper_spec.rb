@@ -23,4 +23,17 @@ describe EBL::Helpers::CoverHelper do
       end
     end
   end
+
+  describe '#save_cover_to_disk' do
+    it 'saves the cover and returns the assigned file name' do
+      cover = double('EPubInfo::Models::Cover')
+      allow(cover).to receive(:tempfile).and_return('/tmp/test')
+      allow(cover).to receive(:original_file_name).and_return('cover.jpg')
+
+      book = double('EPubInfo::Models::Book')
+      allow(book).to receive(:id).and_return(7)
+
+      expect(subject.save_cover_to_disk(book, cover)).to eq '7_cover.jpg'
+    end
+  end
 end
