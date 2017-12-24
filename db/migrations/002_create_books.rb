@@ -14,6 +14,8 @@ Sequel.migration do
       column :epub_version, :string, size: 10
       column :rights, :string, size: 500
       column :source, :string, size: 200
+      column :path, :text, null: false
+      column :checksum, :string, size: 100
     end
   end
 
