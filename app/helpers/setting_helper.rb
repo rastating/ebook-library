@@ -11,6 +11,17 @@ module EBL
         return default if setting.nil?
         setting.value
       end
+
+      # @return [String] the path where books are stored.
+      def library_path
+        get_setting_value('library_path')
+      end
+
+      # @return [String] the path to the folder which should
+      #   be monitored for new books.
+      def watch_folder_path
+        get_setting_value('watch_folder')
+      end
     end
   end
 end

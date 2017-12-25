@@ -29,4 +29,18 @@ describe EBL::Helpers::SettingHelper do
       end
     end
   end
+
+  describe '#library_path' do
+    it 'gets the value of the library_path setting' do
+      EBL::Models::Setting.create(key: 'library_path', value: '/test')
+      expect(subject.library_path).to eq '/test'
+    end
+  end
+
+  describe '#watch_folder_path' do
+    it 'gets the value of the watch_folder setting' do
+      EBL::Models::Setting.create(key: 'watch_folder', value: '/test')
+      expect(subject.watch_folder_path).to eq '/test'
+    end
+  end
 end
