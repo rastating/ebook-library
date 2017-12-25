@@ -2,6 +2,8 @@ module EBL
   module Models
     # A log of a book import operation.
     class ImportLog < Sequel::Model
+      plugin :validation_helpers
+
       one_to_one :book
 
       def validate
@@ -13,7 +15,7 @@ module EBL
       # @param path [String] the path of the file to check.
       # @return [Boolean] true if the file has already been imported.
       def self.imported?(path)
-        ImportLog.find(path: path).count > 0
+        ImportLog.count(path: path) > 0
       end
     end
   end
