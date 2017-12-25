@@ -16,10 +16,14 @@ require_relative '../app/helpers/cover_helper'
 require_relative '../app/helpers/logging_helper'
 require_relative '../app/helpers/library_file_system_helper'
 
+require_relative '../app/jobs/epub_scan_job'
+require_relative '../app/jobs/refresh_metadata_job'
+
 require 'rack/test'
 require 'rspec'
 require 'rspec_sequel_matchers'
 require 'database_cleaner'
+require 'sucker_punch/testing/inline'
 
 DatabaseCleaner[:sequel].db = Sequel::Model.db
 
