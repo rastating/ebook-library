@@ -9,6 +9,7 @@ require_relative '../app/models/subject'
 require_relative '../app/models/identifier'
 require_relative '../app/models/date'
 require_relative '../app/models/setting'
+require_relative '../app/models/import_log'
 
 require_relative '../app/helpers/setting_helper'
 require_relative '../app/helpers/cover_helper'
