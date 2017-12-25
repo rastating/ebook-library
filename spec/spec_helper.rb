@@ -14,6 +14,7 @@ require_relative '../app/models/import_log'
 require_relative '../app/helpers/setting_helper'
 require_relative '../app/helpers/cover_helper'
 require_relative '../app/helpers/logging_helper'
+require_relative '../app/helpers/library_file_system_helper'
 
 require 'rack/test'
 require 'rspec'
