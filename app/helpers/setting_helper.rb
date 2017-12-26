@@ -1,3 +1,5 @@
+require 'app/models/setting'
+
 module EBL
   module Helpers
     # A helper module containing methods for accessing service settings.

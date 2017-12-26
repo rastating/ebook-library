@@ -1,3 +1,5 @@
+require 'app/helpers/setting_helper'
+
 module EBL
   module Helpers
     # A helper module containing methods for handling book cover related tasks.

@@ -1,3 +1,8 @@
+require 'app/models/author'
+require 'app/models/subject'
+require 'app/models/identifier'
+require 'app/models/date'
+
 module EBL
   module Models
     # An object representing a book created from an ePub's metadata.

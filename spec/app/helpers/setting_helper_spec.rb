@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/helpers/setting_helper'
 
 describe EBL::Helpers::SettingHelper do
   let(:subject) do

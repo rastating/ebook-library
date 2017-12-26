@@ -1,4 +1,4 @@
-require 'fileutils'
+require 'app/helpers/setting_helper'
 
 module EBL
   module Helpers

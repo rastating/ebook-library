@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/helpers/cover_helper'
 
 describe EBL::Helpers::CoverHelper do
   let(:subject) do

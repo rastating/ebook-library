@@ -1,3 +1,5 @@
+require 'app/models/book'
+
 module EBL
   module Models
     # An author of a {Book}.

@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/models/identifier'
 
 describe EBL::Models::Identifier, type: :model do
   it { is_expected.to have_many_to_one :book }

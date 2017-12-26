@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/helpers/library_file_system_helper'
 
 describe EBL::Helpers::LibraryFileSystemHelper do
   let(:subject) do

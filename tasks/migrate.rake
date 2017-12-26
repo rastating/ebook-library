@@ -1,6 +1,3 @@
-require 'sequel'
-require 'yaml'
-
 namespace :db do
   desc 'Run database migrations'
   task :migrate, [:version] do |_t, args|

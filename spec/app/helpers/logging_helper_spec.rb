@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/helpers/logging_helper'
 
 describe EBL::Helpers::LoggingHelper do
   let(:subject) do

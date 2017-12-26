@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/models/book'
 
 describe EBL::Models::Book, type: :model do
   let(:subject) { described_class.new }

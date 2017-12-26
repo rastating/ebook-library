@@ -1,3 +1,5 @@
+require 'app/models/book'
+
 module EBL
   module Models
     # A log of a book import operation.

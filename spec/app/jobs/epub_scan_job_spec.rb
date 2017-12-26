@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/jobs/epub_scan_job'
 
 describe EBL::Jobs::EpubScanJob do
   let(:subject) { described_class.new }
@@ -32,6 +33,7 @@ describe EBL::Jobs::EpubScanJob do
 
         allow(EBL::Models::Book).to receive(:from_epub).and_return book
         allow(subject).to receive(:log_error).and_return true
+        allow(subject).to receive(:extract_authors_from_epub).and_return []
 
         result = subject.create_book('/path/to/epub')
 

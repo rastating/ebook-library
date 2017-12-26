@@ -1,3 +1,12 @@
+require 'app/models/book'
+require 'app/models/import_log'
+
+require 'app/helpers/library_file_system_helper'
+require 'app/helpers/logging_helper'
+require 'app/helpers/metadata_helper'
+
+require 'app/jobs/refresh_metadata_job'
+
 module EBL
   module Jobs
     # A background job that will scan a directory for ePub files
@@ -6,6 +15,13 @@ module EBL
       include SuckerPunch::Job
       include EBL::Helpers::LoggingHelper
       include EBL::Helpers::LibraryFileSystemHelper
+      include EBL::Helpers::MetadataHelper
+
+      def save_book_and_import_log(book)
+        book.save
+        extract_authors_from_epub(book.path).each { |a| book.add_author(a) }
+        EBL::Models::ImportLog.create(path: book.path, book_id: book.id)
+      end
 
       # Create and save a new book in the database.
       # @param book_path [String] the path to the ePub file.
@@ -14,7 +30,7 @@ module EBL
         book = EBL::Models::Book.from_epub(book_path)
 
         if book.valid?
-          book.save
+          save_book_and_import_log book
           return book
         else
           log_error "Failed to validate book: #{book.errors.to_json}"

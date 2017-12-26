@@ -3,22 +3,6 @@ $VERBOSE = nil
 
 require_relative '../env'
 
-require_relative '../app/models/book'
-require_relative '../app/models/author'
-require_relative '../app/models/subject'
-require_relative '../app/models/identifier'
-require_relative '../app/models/date'
-require_relative '../app/models/setting'
-require_relative '../app/models/import_log'
-
-require_relative '../app/helpers/setting_helper'
-require_relative '../app/helpers/cover_helper'
-require_relative '../app/helpers/logging_helper'
-require_relative '../app/helpers/library_file_system_helper'
-
-require_relative '../app/jobs/epub_scan_job'
-require_relative '../app/jobs/refresh_metadata_job'
-
 require 'rack/test'
 require 'rspec'
 require 'rspec_sequel_matchers'

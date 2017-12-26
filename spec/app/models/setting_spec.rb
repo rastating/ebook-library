@@ -1,4 +1,5 @@
 require_relative '../../spec_helper'
+require 'app/models/setting'
 
 describe EBL::Models::Setting, type: :model do
   it { is_expected.to validate_max_length 50, :key }
