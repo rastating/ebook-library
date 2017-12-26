@@ -77,6 +77,7 @@ describe EBL::Jobs::EpubScanJob do
         logged_message = false
         book = double('book', title: 'title', id: 1)
 
+        allow(EBL::Jobs::RefreshMetadataJob).to receive(:perform_async).and_return true
         allow(subject).to receive(:create_book).and_return book
         allow(subject).to receive(:copy_book_to_library).and_return true
         allow(subject).to receive(:log_green) do |p1|
