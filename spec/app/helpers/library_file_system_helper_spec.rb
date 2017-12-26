@@ -121,6 +121,26 @@ describe EBL::Helpers::LibraryFileSystemHelper do
         expect(set_path).to be true
         expect(saved).to be true
       end
+
+      context 'and remove_src is true' do
+        it 'removes the file originally stored in Book#path' do
+          allow(subject).to receive(:library_path).and_return('/library/path')
+          allow(book_dbl).to receive(:update_path_and_refresh_checksum).and_return true
+          allow(book_dbl).to receive(:path).and_return '/original/book/path'
+
+          allow(FileUtils).to receive(:mkdir_p).and_return true
+          allow(FileUtils).to receive(:cp).and_return true
+          allow(File).to receive(:exist?).and_return true
+
+          removed_file = false
+          allow(FileUtils).to receive(:rm) do |p1|
+            removed_file = (p1 == '/original/book/path')
+          end
+
+          expect(subject.copy_book_to_library(book_dbl, true)).to be true
+          expect(removed_file).to be true
+        end
+      end
     end
   end
 end

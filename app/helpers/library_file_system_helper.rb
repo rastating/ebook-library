@@ -28,16 +28,19 @@ module EBL
       # {EBL::Models::Book} specified, and update the model.
       # @param book [EBL::Models::Book] the book to copy.
       # @return [Boolean] true if the operation is successful.
-      def copy_book_to_library(book)
+      def copy_book_to_library(book, remove_src = false)
         author_path = File.join(library_path, safe_name(book.primary_author))
         FileUtils.mkdir_p author_path
 
         book_filename = "#{book.id}_#{safe_name(book.title)}.epub"
         dest_path = File.join(author_path, book_filename)
-        FileUtils.cp book.path, dest_path
+        src_path = book.path
+        FileUtils.cp src_path, dest_path
 
         return false unless File.exist?(dest_path)
         book.update_path_and_refresh_checksum(dest_path, true)
+
+        FileUtils.rm src_path if remove_src
         true
       end
     end
