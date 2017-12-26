@@ -15,7 +15,7 @@ module EBL
       # @param path [String] the path of the file to check.
       # @return [Boolean] true if the file has already been imported.
       def self.imported?(path)
-        ImportLog.count(path: path) > 0
+        !ImportLog.find(path: path).nil?
       end
     end
   end
