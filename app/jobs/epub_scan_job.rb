@@ -48,7 +48,7 @@ module EBL
         end
 
         log_green "Imported #{book.title} [ID:#{book.id}]"
-        EBL::Jobs::RefreshMetadataJob.perform_async(book.id)
+        EBL::Jobs::RefreshMetadataJob.perform_async(book.id, true)
       end
 
       # Process the specified path by queuing a scan job if it is

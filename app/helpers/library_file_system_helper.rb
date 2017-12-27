@@ -43,6 +43,17 @@ module EBL
         FileUtils.rm src_path if remove_src
         true
       end
+
+      # Check if a book's checksum has changed since it was last updated.
+      # @param book [EBL::Models::Book] the book to check.
+      # @return [Boolean] true if the file on disk has changed.
+      def checksum_changed?(book)
+        data = File.read(path)
+        md5 = Digest::MD5.new
+        md5 << data
+
+        book.checksum != md5
+      end
     end
   end
 end
