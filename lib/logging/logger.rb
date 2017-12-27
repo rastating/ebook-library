@@ -16,17 +16,21 @@ module EBL
     #   `:green`, `:yellow`, `:blue`, `:magenta`, `:cyan`, `:white`,
     #   `:light_black`, `:light_red`, `:light_green`, `:light_yellow`,
     #   `:light_blue`, `:light_cyan` or `:light_white`.
+    # @return [String] the output that was logged.
     def log(message, colour = :light_white)
       unless VALID_COLOUR_CODES.include?(colour)
         raise "Unknown colour code: #{colour}"
       end
 
-      if context.nil? || context.empty?
-        puts message.send(colour)
-      else
+      output = message.send(colour)
+
+      if !context.nil? && !context.empty?
         tag = "[#{context}]".send(colour)
-        puts "#{tag} #{message}"
+        output = "#{tag} #{message}"
       end
+
+      puts output unless ENV['RACK_ENV'] == 'test'
+      output
     end
 
     # @return [String] the context tag to use in all logged messages.
