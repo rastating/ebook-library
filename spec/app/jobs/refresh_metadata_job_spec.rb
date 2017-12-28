@@ -6,13 +6,12 @@ describe EBL::Jobs::RefreshMetadataJob do
   let(:epub_dbl) { double('epub') }
 
   let(:metadata_dbl) do
-    double(
-      'metadata',
+    {
       authors: [],
       dates: [],
       identifiers: [],
       subjects: []
-    )
+    }
   end
 
   let(:book_dbl) do
@@ -113,15 +112,18 @@ describe EBL::Jobs::RefreshMetadataJob do
 
   describe '#update_metadata' do
     it 'removes all existing authors' do
-      removed = false
+      book = EBL::Models::Book.first(id: 1)
+      book.add_author(name: 'author1')
+      book.add_author(name: 'author2')
 
-      allow(book_dbl).to receive(:remove_all_authors) do
-        removed = true
-      end
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.authors.length).to eq 2
 
-      subject.book = book_dbl
+      subject.book = book
       subject.update_metadata
-      expect(removed).to be true
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.authors.length).to eq 0
     end
 
     it 'removes all existing dates' do
@@ -177,10 +179,10 @@ describe EBL::Jobs::RefreshMetadataJob do
         EBL::Models::Date.new(date: Date.new(2017, 12, 27), event: 'event')
       ]
 
-      allow(metadata_dbl).to receive(:authors).and_return authors
-      allow(metadata_dbl).to receive(:subjects).and_return subjects
-      allow(metadata_dbl).to receive(:identifiers).and_return identifiers
-      allow(metadata_dbl).to receive(:dates).and_return dates
+      metadata_dbl[:authors] = authors
+      metadata_dbl[:subjects] = subjects
+      metadata_dbl[:identifiers] = identifiers
+      metadata_dbl[:dates] = dates
 
       subject.book = EBL::Models::Book.first(id: 1)
       subject.update_metadata

@@ -17,16 +17,16 @@ module EBL
         metadata = extract_metadata_from_epub(book.path)
 
         book.remove_all_authors
-        metadata.authors.each { |a| book.add_author a }
+        metadata[:authors].each { |a| book.add_author a }
 
         book.remove_all_dates
-        metadata.dates.each { |d| book.add_date d }
+        metadata[:dates].each { |d| book.add_date d }
 
         book.remove_all_identifiers
-        metadata.identifiers.each { |i| book.add_identifier i }
+        metadata[:identifiers].each { |i| book.add_identifier i }
 
         book.remove_all_subjects
-        metadata.subjects.each { |s| book.add_subject s }
+        metadata[:subjects].each { |s| book.add_subject s }
       end
 
       # @return [Boolena] true if the job should be skipped.
