@@ -65,6 +65,48 @@ describe EBL::Helpers::MetadataHelper do
         expect(result[0].name).to eq 'author1'
         expect(result[1].name).to eq 'author2'
       end
+
+      it 'fetches existing authors, if they already exist' do
+        EBL::Models::Author.create(name: 'author2')
+
+        authors = [
+          double('author', name: 'author1'),
+          double('author', name: 'author2')
+        ]
+
+        allow(epub_dbl).to receive(:creators).and_return authors
+
+        result = subject.extract_authors_from_epubinfo(epub_dbl)
+        expect(result.length).to eq 2
+        expect(result[0]).to be_a EBL::Models::Author
+        expect(result[1]).to be_a EBL::Models::Author
+        expect(result[0].id).to be_nil
+        expect(result[1].id).to eq 1
+      end
+
+      it 'returns a unique data set' do
+        EBL::Models::Author.create(name: 'author2')
+
+        authors = [
+          double('author', name: 'author1'),
+          double('author', name: 'author2'),
+          double('author', name: 'author1'),
+          double('author', name: 'author3')
+        ]
+
+        allow(epub_dbl).to receive(:creators).and_return authors
+
+        result = subject.extract_authors_from_epubinfo(epub_dbl)
+        expect(result.length).to eq 3
+        expect(result[0]).to be_a EBL::Models::Author
+        expect(result[1]).to be_a EBL::Models::Author
+        expect(result[2]).to be_a EBL::Models::Author
+        expect(result[0].id).to be_nil
+        expect(result[1].id).to eq 1
+        expect(result[0].name).to eq 'author1'
+        expect(result[1].name).to eq 'author2'
+        expect(result[2].name).to eq 'author3'
+      end
     end
   end
 

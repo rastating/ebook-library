@@ -19,7 +19,11 @@ module EBL
         authors = []
 
         epub.creators.each do |c|
-          authors.push EBL::Models::Author.new(name: c.name)
+          author = EBL::Models::Author.first(name: c.name)
+          author = EBL::Models::Author.new(name: c.name) if author.nil?
+
+          already_added = authors.find { |a| a.name == c.name }
+          authors.push(author) if already_added.nil?
         end
 
         authors
@@ -32,6 +36,7 @@ module EBL
         dates = []
 
         epub.dates.each do |d|
+          next if d.date.nil?
           dates.push EBL::Models::Date.new(
             date: d.date,
             event: d.event
