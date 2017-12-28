@@ -22,7 +22,7 @@ describe EBL::Models::Book, type: :model do
     )
   end
 
-  it { is_expected.to have_one_to_many :authors }
+  it { is_expected.to have_many_to_many :authors }
   it { is_expected.to have_one_to_many :subjects }
   it { is_expected.to have_one_to_many :identifiers }
   it { is_expected.to have_one_to_many :dates }

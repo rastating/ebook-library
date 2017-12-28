@@ -1,4 +1,5 @@
 require 'app/models/author'
+require 'app/models/book_author'
 require 'app/models/subject'
 require 'app/models/identifier'
 require 'app/models/date'
@@ -9,7 +10,8 @@ module EBL
     class Book < Sequel::Model
       plugin :validation_helpers
 
-      one_to_many :authors
+      many_to_many :authors, join_table: :book_authors
+
       one_to_many :subjects
       one_to_many :identifiers
       one_to_many :dates
