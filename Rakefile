@@ -1,3 +1,3 @@
 require_relative 'env'
 
-Rake.add_rakelib 'tasks'
+Rake.add_rakelib 'tasks/**/*'

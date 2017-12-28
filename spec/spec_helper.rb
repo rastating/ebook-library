@@ -10,7 +10,7 @@ require 'rspec_sequel_matchers'
 require 'database_cleaner'
 require 'sucker_punch/testing/inline'
 
-load 'tasks/migrate.rake'
+load 'tasks/db/migrate.rake'
 Rake::Task['db:migrate'].execute
 
 DatabaseCleaner[:sequel].db = Sequel::Model.db
