@@ -14,17 +14,6 @@ describe EBL::Jobs::RefreshMetadataJob do
     }
   end
 
-  let(:book_dbl) do
-    double(
-      'book',
-      path: '/path/to/epub',
-      remove_all_authors: true,
-      remove_all_dates: true,
-      remove_all_identifiers: true,
-      remove_all_subjects: true
-    )
-  end
-
   before(:each) do
     allow(EPUBInfo).to receive(:get).and_return epub_dbl
     allow(subject).to receive(:extract_metadata_from_epub).and_return metadata_dbl
@@ -127,39 +116,48 @@ describe EBL::Jobs::RefreshMetadataJob do
     end
 
     it 'removes all existing dates' do
-      removed = false
+      book = EBL::Models::Book.first(id: 1)
+      book.add_date(date: '2017-12-28')
+      book.add_date(date: '2017-12-27', event: 'test')
 
-      allow(book_dbl).to receive(:remove_all_dates) do
-        removed = true
-      end
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.dates.length).to eq 2
 
-      subject.book = book_dbl
+      subject.book = book
       subject.update_metadata
-      expect(removed).to be true
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.dates.length).to eq 0
     end
 
     it 'removes all existing identifiers' do
-      removed = false
+      book = EBL::Models::Book.first(id: 1)
+      book.add_identifier(identifier: 'id')
+      book.add_identifier(identifier: 'id2')
 
-      allow(book_dbl).to receive(:remove_all_identifiers) do
-        removed = true
-      end
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.identifiers.length).to eq 2
 
-      subject.book = book_dbl
+      subject.book = book
       subject.update_metadata
-      expect(removed).to be true
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.identifiers.length).to eq 0
     end
 
     it 'removes all existing subjects' do
-      removed = false
+      book = EBL::Models::Book.first(id: 1)
+      book.add_subject(name: 'test')
+      book.add_subject(name: 'test2')
 
-      allow(book_dbl).to receive(:remove_all_subjects) do
-        removed = true
-      end
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.subjects.length).to eq 2
 
-      subject.book = book_dbl
+      subject.book = book
       subject.update_metadata
-      expect(removed).to be true
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.subjects.length).to eq 0
     end
 
     it 'adds the new metadata to the book' do
