@@ -8,6 +8,7 @@ end
 group :http do
   gem 'sinatra', '~>2.0'
   gem 'sinatra-contrib', '~>2.0'
+  gem 'puma', '~>3.4'
 end
 
 group :cli do
