@@ -33,4 +33,24 @@ describe EBL::Logger do
       end
     end
   end
+
+  describe '#write' do
+    context 'when the context is not empty' do
+      it 'outputs the context in light white' do
+        output = "#{'[context]'.light_white} msg"
+        subject.context = 'context'
+        expect(subject.write('msg')).to eq output
+      end
+    end
+
+    context 'when the context is empty' do
+      it 'omits the context parentheses from the output' do
+        expect(subject.log('msg')).to_not match(/\[\]/)
+      end
+
+      it 'outputs the message in light white' do
+        expect(subject.write('msg')).to eq 'msg'.light_white
+      end
+    end
+  end
 end

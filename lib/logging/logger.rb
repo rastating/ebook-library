@@ -8,7 +8,10 @@ module EBL
     ].freeze
 
     # Create a new instance of #{Logger}.
-    def initialize() end
+    # @param context [String] the context of thet logger.
+    def initialize(context = nil)
+      self.context = context
+    end
 
     # Log a message to the CLI and active log file(s).
     # @param message [String] the message to log.
@@ -31,6 +34,14 @@ module EBL
 
       puts output unless ENV['RACK_ENV'] == 'test'
       output
+    end
+
+    # Log a message to the CLI and active log file(s) with a
+    # font colour of light white.
+    # @param message [String] the message to log.
+    # @return [String] the output that was logged.
+    def write(message)
+      log(message)
     end
 
     # @return [String] the context tag to use in all logged messages.
