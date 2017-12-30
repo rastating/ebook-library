@@ -21,4 +21,4 @@ require 'yaml'
 
 require 'db/environment'
 require 'vendor/epubinfo/cover_patch'
-require 'lib/logging/logger'
+require 'lib/ebl/logger'
