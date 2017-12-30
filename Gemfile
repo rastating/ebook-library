@@ -21,6 +21,7 @@ end
 
 group :misc  do
   gem 'sucker_punch', '~> 2.0'
+  gem 'bcrypt', '~> 3.1.11'
 end
 
 group :development do

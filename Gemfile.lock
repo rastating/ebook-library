@@ -2,6 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.10.3)
+    bcrypt (3.1.11)
     colorize (0.8.1)
     concurrent-ruby (1.0.5)
     database_cleaner (1.6.2)
@@ -59,6 +60,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bcrypt (~> 3.1.11)
   colorize (>= 0.8.1)
   database_cleaner (~> 1.6.2)
   epubinfo (= 0.4.4)
