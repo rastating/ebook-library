@@ -4,6 +4,9 @@ Metrics/BlockLength:
   Exclude:
     - spec/**/*
 
+Metrics/LineLength:
+  Max: 100
+
 AllCops:
   Exclude:
     - vendor/**/*
