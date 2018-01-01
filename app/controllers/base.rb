@@ -1,7 +1,11 @@
+require 'app/helpers/session_helper'
+
 module EBL
   module Controllers
     # Base controller for all routes.
     class Base < Sinatra::Base
+      include EBL::Helpers::SessionHelper
+
       enable :sessions
 
       use Rack::CommonLogger, EBL::Logger.new('rack:api')
@@ -21,10 +25,6 @@ module EBL
       before do
         pass unless settings.requires_session
         halt 401 unless logged_in?
-      end
-
-      def logged_in?
-        !session[:username].nil?
       end
     end
   end

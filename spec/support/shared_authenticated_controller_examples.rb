@@ -12,6 +12,6 @@ RSpec.shared_examples 'an authenticated route controller' do
   end
 
   context 'when the user is logged in' do
-    it_behaves_like 'a route controller', username: 'username'
+    it_behaves_like 'a route controller', user_id: 1
   end
 end
