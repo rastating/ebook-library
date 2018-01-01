@@ -7,6 +7,8 @@ describe 'rake user:create', type: :task do
   let(:password_input) { 'test' }
 
   before(:each) do
+    subject.reenable
+
     allow_any_instance_of(EBL::InputHandler).to receive(
       :get_alphanumeric_value
     ).and_return username_input
