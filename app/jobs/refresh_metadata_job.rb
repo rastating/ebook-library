@@ -1,3 +1,4 @@
+require 'app/helpers/cover_helper'
 require 'app/helpers/logging_helper'
 require 'app/helpers/library_file_system_helper'
 require 'app/helpers/metadata_helper'
@@ -12,6 +13,7 @@ module EBL
       include EBL::Helpers::LoggingHelper
       include EBL::Helpers::LibraryFileSystemHelper
       include EBL::Helpers::MetadataHelper
+      include EBL::Helpers::CoverHelper
 
       def update_metadata
         metadata = extract_metadata_from_epub(book.path)
@@ -21,7 +23,14 @@ module EBL
         update_book_identifiers book, metadata[:identifiers]
         update_book_subjects book, metadata[:subjects]
 
-        save_cover_to_disk(book, metadata[:cover]) unless metadata[:cover].nil?
+        update_book_cover metadata[:cover]
+      end
+
+      # Extract the cover to disk and update the path to it.
+      def update_book_cover(cover)
+        return if cover.nil?
+        book.cover_path = save_cover_to_disk(book, cover)
+        book.save
       end
 
       # @return [Boolena] true if the job should be skipped.

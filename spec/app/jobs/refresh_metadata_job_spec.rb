@@ -18,7 +18,7 @@ describe EBL::Jobs::RefreshMetadataJob do
   before(:each) do
     allow(EPUBInfo).to receive(:get).and_return epub_dbl
     allow(subject).to receive(:extract_metadata_from_epub).and_return metadata_dbl
-    allow(subject).to receive(:save_cover_to_disk)
+    allow(subject).to receive(:save_cover_to_disk).and_return '/new/path/to/cover'
     allow(epub_dbl).to receive(:cover).and_return nil
 
     EBL::Models::Book.create(
@@ -199,6 +199,17 @@ describe EBL::Jobs::RefreshMetadataJob do
       expect(book.subjects[0].name).to eq 'subject'
       expect(book.identifiers[0].identifier).to eq 'id'
       expect(book.dates[0].event).to eq 'event'
+    end
+  end
+
+  describe '#update_book_cover' do
+    it 'saves the path of the extracted cover into the cover_path field of the book' do
+      subject.book = EBL::Models::Book.first
+      expect(subject.book.cover_path).to be_nil
+      subject.update_book_cover double('cover')
+
+      book = EBL::Models::Book.first
+      expect(book.cover_path).to eq '/new/path/to/cover'
     end
   end
 end
