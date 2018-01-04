@@ -10,13 +10,16 @@ describe EBL::Jobs::RefreshMetadataJob do
       authors: [],
       dates: [],
       identifiers: [],
-      subjects: []
+      subjects: [],
+      cover: nil
     }
   end
 
   before(:each) do
     allow(EPUBInfo).to receive(:get).and_return epub_dbl
     allow(subject).to receive(:extract_metadata_from_epub).and_return metadata_dbl
+    allow(subject).to receive(:save_cover_to_disk)
+    allow(epub_dbl).to receive(:cover).and_return nil
 
     EBL::Models::Book.create(
       title: 'test',

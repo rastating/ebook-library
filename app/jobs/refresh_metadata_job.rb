@@ -16,17 +16,12 @@ module EBL
       def update_metadata
         metadata = extract_metadata_from_epub(book.path)
 
-        book.remove_all_authors
-        metadata[:authors].each { |a| book.add_author a }
+        update_book_authors book, metadata[:authors]
+        update_book_dates book, metadata[:dates]
+        update_book_identifiers book, metadata[:identifiers]
+        update_book_subjects book, metadata[:subjects]
 
-        book.remove_all_dates
-        metadata[:dates].each { |d| book.add_date d }
-
-        book.remove_all_identifiers
-        metadata[:identifiers].each { |i| book.add_identifier i }
-
-        book.remove_all_subjects
-        metadata[:subjects].each { |s| book.add_subject s }
+        save_cover_to_disk(book, metadata[:cover]) unless metadata[:cover].nil?
       end
 
       # @return [Boolena] true if the job should be skipped.
