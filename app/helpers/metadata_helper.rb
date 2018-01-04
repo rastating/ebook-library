@@ -84,8 +84,41 @@ module EBL
           authors:      extract_authors_from_epubinfo(epub),
           dates:        extract_dates_from_epubinfo(epub),
           identifiers:  extract_identifiers_from_epubinfo(epub),
-          subjects:     extract_subjects_from_epubinfo(epub)
+          subjects:     extract_subjects_from_epubinfo(epub),
+          cover:        epub.cover
         }
+      end
+
+      # Remove the existing subjects and create the new ones.
+      # @param book [EBL::Models::Book] the book to update.
+      # @param subjects [Array] an array of EBL::Models::Subject
+      def update_book_subjects(book, subjects)
+        book.remove_all_subjects
+        subjects.each { |s| book.add_subject s }
+      end
+
+      # Remove the existing identifiers and create the new ones.
+      # @param book [EBL::Models::Book] the book to update.
+      # @param subjects [Array] an array of EBL::Models::Identifier
+      def update_book_identifiers(book, identifiers)
+        book.remove_all_identifiers
+        identifiers.each { |i| book.add_identifier i }
+      end
+
+      # Remove the existing authors and create the new ones.
+      # @param book [EBL::Models::Book] the book to update.
+      # @param subjects [Array] an array of EBL::Models::Author
+      def update_book_authors(book, authors)
+        book.remove_all_authors
+        authors.each { |a| book.add_author a }
+      end
+
+      # Remove the existing dates and create the new ones.
+      # @param book [EBL::Models::Book] the book to update.
+      # @param subjects [Array] an array of EBL::Models::Date
+      def update_book_dates(book, dates)
+        book.remove_all_dates
+        dates.each { |d| book.add_date d }
       end
     end
   end

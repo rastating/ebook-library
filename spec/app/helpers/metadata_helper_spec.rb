@@ -11,7 +11,29 @@ describe EBL::Helpers::MetadataHelper do
   let(:epub_dbl) { double('epub') }
 
   before(:each) do
+    allow(epub_dbl).to receive(:cover).and_return nil
     allow(EPUBInfo).to receive(:get).and_return epub_dbl
+
+    book = EBL::Models::Book.create(
+      title: 'test',
+      description: 'test',
+      drm_protected: false,
+      path: '/path/to/epub'
+    )
+
+    book.add_author(
+      EBL::Models::Author.new(name: 'author')
+    )
+
+    book.add_identifier(
+      EBL::Models::Identifier.new(identifier: 'id', scheme: 'scheme')
+    )
+
+    book.add_date(
+      EBL::Models::Date.new(date: Date.new(2017, 12, 27), event: 'event')
+    )
+
+    book.add_subject(EBL::Models::Subject.new(name: 'subject1'))
   end
 
   describe '#extract_authors_from_epub' do
@@ -81,7 +103,7 @@ describe EBL::Helpers::MetadataHelper do
         expect(result[0]).to be_a EBL::Models::Author
         expect(result[1]).to be_a EBL::Models::Author
         expect(result[0].id).to be_nil
-        expect(result[1].id).to eq 1
+        expect(result[1].id).to_not be_nil
       end
 
       it 'returns a unique data set' do
@@ -102,7 +124,7 @@ describe EBL::Helpers::MetadataHelper do
         expect(result[1]).to be_a EBL::Models::Author
         expect(result[2]).to be_a EBL::Models::Author
         expect(result[0].id).to be_nil
-        expect(result[1].id).to eq 1
+        expect(result[1].id).to_not be_nil
         expect(result[0].name).to eq 'author1'
         expect(result[1].name).to eq 'author2'
         expect(result[2].name).to eq 'author3'
@@ -200,6 +222,74 @@ describe EBL::Helpers::MetadataHelper do
       expect(result).to have_key :dates
       expect(result).to have_key :identifiers
       expect(result).to have_key :subjects
+    end
+  end
+
+  describe '#update_book_subjects' do
+    it 'adds the new subjects to the book' do
+      subjects = [
+        EBL::Models::Subject.new(name: 'new_subject')
+      ]
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.subjects.first.name).to eq 'subject1'
+
+      subject.update_book_subjects book, subjects
+      book = EBL::Models::Book.first(id: 1)
+
+      expect(book.subjects.length).to eq 1
+      expect(book.subjects[0].name).to eq 'new_subject'
+    end
+  end
+
+  describe '#update_book_identifiers' do
+    it 'adds the new identifiers to the book' do
+      identifiers = [
+        EBL::Models::Identifier.new(identifier: 'new_id', scheme: 'scheme')
+      ]
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.identifiers.first.identifier).to eq 'id'
+
+      subject.update_book_identifiers book, identifiers
+      book = EBL::Models::Book.first(id: 1)
+
+      expect(book.identifiers.length).to eq 1
+      expect(book.identifiers[0].identifier).to eq 'new_id'
+    end
+  end
+
+  describe '#update_book_authors' do
+    it 'adds the new authors to the book' do
+      authors = [
+        EBL::Models::Author.new(name: 'new_author')
+      ]
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.authors.first.name).to eq 'author'
+
+      subject.update_book_authors book, authors
+      book = EBL::Models::Book.first(id: 1)
+
+      expect(book.authors.length).to eq 1
+      expect(book.authors[0].name).to eq 'new_author'
+    end
+  end
+
+  describe '#update_book_dates' do
+    it 'adds the new dates to the book' do
+      dates = [
+        EBL::Models::Date.new(date: Date.new(2018, 1, 4), event: 'new_event')
+      ]
+
+      book = EBL::Models::Book.first(id: 1)
+      expect(book.dates[0].event).to eq 'event'
+
+      subject.update_book_dates book, dates
+      book = EBL::Models::Book.first(id: 1)
+
+      expect(book.dates.length).to eq 1
+      expect(book.dates[0].event).to eq 'new_event'
     end
   end
 end
