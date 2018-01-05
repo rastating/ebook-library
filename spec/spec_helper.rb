@@ -32,4 +32,9 @@ RSpec.configure do |config|
       example.run
     end
   end
+
+  config.before(:each) do
+    allow(FileUtils).to receive(:mkdir_p)
+    allow(FileUtils).to receive(:cp)
+  end
 end

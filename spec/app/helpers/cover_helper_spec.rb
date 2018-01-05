@@ -19,7 +19,7 @@ describe EBL::Helpers::CoverHelper do
     context 'when the covers_path setting does not exist' do
       it 'returns the default path' do
         base = File.expand_path('../../../', __dir__)
-        path = File.join(base, 'public', 'assets', 'images', 'covers')
+        path = File.join(base, 'db', 'covers')
         expect(subject.covers_directory_path).to eq path
       end
     end

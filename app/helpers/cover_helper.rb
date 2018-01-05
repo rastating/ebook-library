@@ -12,7 +12,7 @@ module EBL
         return path unless path.nil?
 
         base_path = File.expand_path('../../', __dir__)
-        File.join(base_path, 'public', 'assets', 'images', 'covers')
+        File.join(base_path, 'db', 'covers')
       end
 
       # Save a cover from an ePub to disk.
@@ -21,6 +21,7 @@ module EBL
       # @return [String] the filename the cover was stored as.
       def save_cover_to_disk(book, cover)
         base = covers_directory_path
+        FileUtils.mkdir_p(base) unless File.exist?(base)
         filename = "#{book.id}_#{cover.original_file_name}"
 
         cover.tempfile do |file|
