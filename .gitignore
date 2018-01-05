@@ -1,2 +1,3 @@
 *.db
 public/assets/images/covers/**/*
+db/covers/**/*
