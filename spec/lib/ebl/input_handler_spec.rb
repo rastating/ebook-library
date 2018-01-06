@@ -5,6 +5,7 @@ describe EBL::InputHandler do
   let(:subject) { described_class.new(logger_dbl) }
   let(:logger_dbl) { double('EBL::Logger') }
   let(:user_input) { 'test' }
+  let(:directory_res) { true }
 
   before :each do
     allow(subject).to receive(:puts) { |m| m }
@@ -14,6 +15,7 @@ describe EBL::InputHandler do
     allow(STDIN).to receive(:noecho).and_return user_input
     allow(subject).to receive(:print).and_return true
     allow(subject).to receive(:puts).and_return true
+    allow(File).to receive(:directory?).and_return directory_res
   end
 
   describe '#new' do
@@ -91,6 +93,31 @@ describe EBL::InputHandler do
     context 'when the two passwords match and are the correct length' do
       it 'returns the password entered' do
         expect(subject.get_password(1)).to eq 'test'
+      end
+    end
+  end
+
+  describe '#get_path' do
+    context 'when the specified directory exists' do
+      let(:directory_res) { true }
+
+      it 'returns the path' do
+        expect(subject.get_path('test')).to eq user_input
+      end
+
+      context 'when a new line appears at the end of the path' do
+        let(:user_input) { "/path/with/whitespace\r\n" }
+        it 'chomps the new line from the end' do
+          expect(subject.get_path('test')).to eq '/path/with/whitespace'
+        end
+      end
+    end
+
+    context 'when the specified directory does not exist' do
+      let(:directory_res) { false }
+
+      it 'returns nil' do
+        expect(subject.get_path('test')).to be_nil
       end
     end
   end

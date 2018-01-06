@@ -1,5 +1,6 @@
 require 'readline'
 require 'io/console'
+require 'fileutils'
 
 module EBL
   # A class that provides a standardised means of gaining input via the terminal.
@@ -9,6 +10,17 @@ module EBL
     # @return [EBL::InputHandler]
     def initialize(logger)
       self.logger = logger
+    end
+
+    # Prompt for a path to a file / directory.
+    # @param prompt [String] the prompt to display.
+    # @return [String, nil] the path if valid, or nil.
+    def get_path(prompt)
+      value = Readline.readline(prompt).chomp
+      return value.chomp if File.directory?(value)
+
+      logger.log "#{prompt} does not exist"
+      nil
     end
 
     # Prompt for an alphanumeric value.
