@@ -100,6 +100,7 @@ describe EBL::InputHandler do
   describe '#get_path' do
     context 'when the specified directory exists' do
       let(:directory_res) { true }
+      let(:user_input) { '/test' }
 
       it 'returns the path' do
         expect(subject.get_path('test')).to eq user_input
@@ -115,6 +116,7 @@ describe EBL::InputHandler do
 
     context 'when the specified directory does not exist' do
       let(:directory_res) { false }
+      let(:user_input) { '/test' }
 
       it 'returns nil' do
         expect(subject.get_path('test')).to be_nil

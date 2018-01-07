@@ -17,9 +17,12 @@ module EBL
     # @return [String, nil] the path if valid, or nil.
     def get_path(prompt)
       value = Readline.readline(prompt).chomp
-      return value.chomp if File.directory?(value)
+      return nil if value.empty?
 
-      logger.log "#{prompt} does not exist"
+      value = File.expand_path(value)
+      return value if File.directory?(value)
+
+      logger.log "The path entered [#{value}] does not exist", :red
       nil
     end
 
