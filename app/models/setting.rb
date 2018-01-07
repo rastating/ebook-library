@@ -13,6 +13,19 @@ module EBL
 
         validates_presence :value
       end
+
+      def self.create_or_update(key, value)
+        setting = Setting.first(key: key)
+
+        if setting.nil?
+          Setting.create(key: key, value: value)
+        else
+          setting.value = value
+          setting.save
+        end
+
+        setting
+      end
     end
   end
 end
