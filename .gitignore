@@ -1,3 +1,5 @@
 *.db
 public/assets/images/covers/**/*
 db/covers/**/*
+
+\.rake_tasks~
