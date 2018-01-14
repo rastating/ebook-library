@@ -29,6 +29,7 @@ module EBL
           source:        book.source,
           checksum:      book.checksum,
           cover:         book.cover_path,
+          epub_name:     File.basename(book.path),
           subjects:      book.subjects.map { |s| hashify_subject(s) },
           identifiers:   book.identifiers.map { |i| hashify_identifier(i) },
           dates:         book.dates.map { |d| hashify_date(d) }

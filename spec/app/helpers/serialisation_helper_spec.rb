@@ -85,7 +85,7 @@ describe EBL::Helpers::SerialisationHelper do
         rights:        'rights',
         source:        'source',
         checksum:      'checksum',
-        path:          '/path/to/epub',
+        path:          '/path/to/epub.epub',
         cover_path:    'book.jpg'
       )
 
@@ -110,6 +110,7 @@ describe EBL::Helpers::SerialisationHelper do
         source:        'source',
         checksum:      'checksum',
         cover:         'book.jpg',
+        epub_name:     'epub.epub',
         subjects:      [
           { name: 'subject1' },
           { name: 'subject2' }

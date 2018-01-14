@@ -71,7 +71,8 @@ describe EBL::Controllers::Authors do
           'subjects'      => [],
           'identifiers'   => [],
           'dates'         => [],
-          'cover'         => nil
+          'cover'         => nil,
+          'epub_name'     => 'epub'
         }
 
         expect(data.length).to eq 1
