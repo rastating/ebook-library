@@ -46,5 +46,38 @@ describe EBL::Controllers::Authors do
     end
   end
 
+  describe 'GET /:id/books' do
+    context 'when the author id is invalid' do
+      it 'sets status to 404' do
+        get '/999/books', {}, 'rack.session' => { user_id: 1 }
+        expect(last_response.status).to eq 404
+      end
+    end
+
+    context 'when the author id is valid' do
+      it 'sends the books by the author as a JSON array' do
+        get '/1/books', {}, 'rack.session' => { user_id: 1 }
+        data = JSON.parse(last_response.body)
+        expected_hash = {
+          'id'            => 1,
+          'title'         => 'test',
+          'description'   => 'test',
+          'publisher'     => nil,
+          'drm_protected' => false,
+          'epub_version'  => nil,
+          'source'        => nil,
+          'rights'        => nil,
+          'checksum'      => nil,
+          'subjects'      => [],
+          'identifiers'   => [],
+          'dates'         => []
+        }
+
+        expect(data.length).to eq 1
+        expect(data[0]).to eq expected_hash
+      end
+    end
+  end
+
   it_behaves_like 'an authenticated route controller'
 end

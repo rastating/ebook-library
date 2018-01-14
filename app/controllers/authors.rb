@@ -21,6 +21,13 @@ module EBL
         halt 404 if author.nil?
         json hashify_author(author)
       end
+
+      # Get an author's books.
+      get '/:id/books' do
+        author = EBL::Models::Author.first(id: params['id'])
+        halt 404 if author.nil?
+        json(author.books.map { |b| hashify_book(b) })
+      end
     end
   end
 end
