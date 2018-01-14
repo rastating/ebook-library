@@ -70,7 +70,8 @@ describe EBL::Controllers::Authors do
           'checksum'      => nil,
           'subjects'      => [],
           'identifiers'   => [],
-          'dates'         => []
+          'dates'         => [],
+          'cover'         => nil
         }
 
         expect(data.length).to eq 1

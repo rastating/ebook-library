@@ -85,7 +85,8 @@ describe EBL::Helpers::SerialisationHelper do
         rights:        'rights',
         source:        'source',
         checksum:      'checksum',
-        path:          '/path/to/epub'
+        path:          '/path/to/epub',
+        cover_path:    'book.jpg'
       )
 
       book.add_subject(EBL::Models::Subject.new(name: 'subject1'))
@@ -108,6 +109,7 @@ describe EBL::Helpers::SerialisationHelper do
         rights:        'rights',
         source:        'source',
         checksum:      'checksum',
+        cover:         'book.jpg',
         subjects:      [
           { name: 'subject1' },
           { name: 'subject2' }
