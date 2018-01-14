@@ -23,8 +23,12 @@ module EBL
         validates_max_length 500, :publisher, allow_nil: true
         validates_max_length 500, :rights, allow_nil: true
         validates_max_length 200, :source, allow_nil: true
-        validates_max_length 10, :epub_version, allow_nil: true
         validates_max_length 100, :checksum, allow_nil: true
+
+        # validates_max_length bugs if it sees what it thinks is an integer.
+        # use validates_format to work around this in this instance, as
+        # epub_version is typically going to be an integer / float value.
+        validates_format(/^.{1,10}$/, :epub_version) unless epub_version.nil?
 
         validates_presence :description
         validates_presence :drm_protected
@@ -75,6 +79,7 @@ module EBL
         end
 
         book.drm_protected = epub.drm_protected
+        book.epub_version = epub.version.to_s
         book.update_path_and_refresh_checksum(path)
         book
       end

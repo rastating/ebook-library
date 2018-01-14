@@ -8,7 +8,8 @@ describe EBL::Models::Book, type: :model do
       'epub',
       titles: %w[title],
       description: 'desc',
-      drm_protected: false
+      drm_protected: false,
+      version: '1.0'
     )
   end
 
@@ -32,8 +33,6 @@ describe EBL::Models::Book, type: :model do
   it { is_expected.to validate_max_length 500, :rights, allow_nil: true }
   it { is_expected.to validate_max_length 200, :source, allow_nil: true }
   it { is_expected.to validate_max_length 100, :checksum, allow_nil: true }
-
-  it { is_expected.to validate_max_length 10, :epub_version, allow_nil: true }
 
   it { is_expected.to validate_presence :description }
   it { is_expected.to validate_presence :drm_protected }
