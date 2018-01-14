@@ -48,7 +48,12 @@ module EBL
         end
 
         log_green "Imported #{book.title} [ID:#{book.id}]"
-        EBL::Jobs::RefreshMetadataJob.perform_async(book.id, true)
+
+        if sync_refresh
+          EBL::Jobs::RefreshMetadataJob.new.perform(book.id, true)
+        else
+          EBL::Jobs::RefreshMetadataJob.perform_async(book.id, true)
+        end
       end
 
       # Process the specified path by queuing a scan job if it is
@@ -58,7 +63,11 @@ module EBL
         path = File.join(scan_path, name)
 
         if File.directory?(path)
-          EpubScanJob.perform_async(path)
+          if sync_refresh
+            EpubScanJob.new.perform(path)
+          else
+            EpubScanJob.perform_async(path)
+          end
         elsif epub?(path) && !EBL::Models::ImportLog.imported?(path)
           import_book path
         end
@@ -76,6 +85,7 @@ module EBL
         end
       end
 
+      attr_accessor :sync_refresh
       attr_accessor :scan_path
     end
   end
