@@ -6,20 +6,23 @@ describe EBL::Models::Book, type: :model do
   let(:epub_dbl) do
     double(
       'epub',
-      titles: %w[title],
-      description: 'desc',
+      titles:        %w[title],
+      description:   'desc',
       drm_protected: false,
-      version: '1.0'
+      version:       '1.5',
+      source:        'source',
+      rights:        'rights',
+      publisher:     'publisher'
     )
   end
 
   before(:each) do
     EBL::Models::Book.create(
-      title: 'test',
-      description: 'test',
+      title:         'test',
+      description:   'test',
       drm_protected: false,
-      path: '/test',
-      checksum: 'test'
+      path:          '/test',
+      checksum:      'test'
     )
   end
 
@@ -172,6 +175,10 @@ describe EBL::Models::Book, type: :model do
       expect(subject.description).to eq 'desc'
       expect(subject.drm_protected).to be false
       expect(subject.checksum).to eq '098f6bcd4621d373cade4e832627b4f6'
+      expect(subject.rights).to eq 'rights'
+      expect(subject.publisher).to eq 'publisher'
+      expect(subject.epub_version).to eq '1.5'
+      expect(subject.source).to eq 'source'
     end
 
     it 'sets a default #description if it is blank or nil' do

@@ -78,6 +78,9 @@ module EBL
           book.description = epub.description
         end
 
+        book.rights = epub.rights
+        book.source = epub.source
+        book.publisher = epub.publisher
         book.drm_protected = epub.drm_protected
         book.epub_version = epub.version.to_s
         book.update_path_and_refresh_checksum(path)
