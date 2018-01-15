@@ -12,7 +12,8 @@ describe EBL::Controllers::Authors do
       title: 'test',
       description: 'test',
       drm_protected: false,
-      path: '/path/to/epub'
+      path: '/path/to/epub',
+      cover_path: 'cover.jpg'
     )
 
     book.add_author(author)
@@ -71,12 +72,31 @@ describe EBL::Controllers::Authors do
           'subjects'      => [],
           'identifiers'   => [],
           'dates'         => [],
-          'cover'         => nil,
+          'cover'         => 'cover.jpg',
           'epub_name'     => 'epub'
         }
 
         expect(data.length).to eq 1
         expect(data[0]).to eq expected_hash
+      end
+    end
+  end
+
+  describe 'GET /:id/books/covers' do
+    context 'when an author has no books' do
+      it 'returns an empty array' do
+        get '/2/books/covers', {}, 'rack.session' => { user_id: 1 }
+        data = JSON.parse(last_response.body)
+        expect(data.length).to eq 0
+      end
+    end
+
+    context 'when an author has books' do
+      it 'returns an array with the URLs to access the book covers' do
+        get '/1/books/covers', {}, 'rack.session' => { user_id: 1 }
+        data = JSON.parse(last_response.body)
+        expect(data.length).to eq 1
+        expect(data[0]).to eq '/api/books/1/cover/cover.jpg'
       end
     end
   end
