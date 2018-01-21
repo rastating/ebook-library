@@ -11,7 +11,7 @@ namespace :user do
     username = input.get_alphanumeric_value('username', 3, 50)
     next if username.nil?
 
-    unless EBL::Models::User.find(username: username).nil?
+    unless EBL::Models::User.find(username: username.downcase).nil?
       logger.log "#{username} already exists", :red
       next
     end
@@ -20,7 +20,7 @@ namespace :user do
     next if password.nil?
 
     user = EBL::Models::User.new
-    user.username = username
+    user.username = username.downcase
     user.create_password_hash password
     user.save
 

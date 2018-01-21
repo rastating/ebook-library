@@ -30,7 +30,7 @@ module EBL
       # @return [EBL::Models::User] the user model, if it exists and
       #   the password specified is correct. Otherwise, returns nil.
       def self.find_and_verify(username, password)
-        user = User.first(username: username)
+        user = User.first(username: username.downcase)
         return nil if user.nil?
 
         hash = BCrypt::Password.new(user.password)
