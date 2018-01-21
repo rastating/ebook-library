@@ -1,0 +1,33 @@
+.author-panel {
+  position: relative;
+  cursor: pointer;
+}
+
+.author-panel .overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #563D7C;
+  color: #ffffff;
+  z-index: 999;
+  opacity: 0;
+  font-size: 0.1em;
+  transition: opacity 0.3s, font-size 0.3s;
+}
+
+.author-panel:hover .overlay {
+  opacity: 0.8;
+  font-size: 5em;
+}
+
+.author-panel-cover {
+  object-fit: cover;
+  width: 100%;
+  height: 285px;
+}
+
+.author-panel-card {
+  margin-bottom: 15px;
+}

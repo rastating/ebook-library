@@ -1,0 +1,24 @@
+.book-popup {
+  opacity: 1;
+  transition: opacity 0.3s;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background-color: rgba(245, 245, 245, 0.95);
+  padding: 25px;
+  z-index: 999;
+  overflow-y: scroll;
+}
+
+.book-popup.closed {
+  pointer-events: none;
+  opacity: 0;
+}
+
+.book-popup img {
+  max-width: 20%;
+}
+
+.book-popup .container {
+  margin: auto;
+}
