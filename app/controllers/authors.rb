@@ -13,7 +13,7 @@ module EBL
 
       # Get all authors.
       get '/' do
-        json(EBL::Models::Author.all.map { |a| hashify_author(a) })
+        json(EBL::Models::Author.order(:name).all.map { |a| hashify_author(a) })
       end
 
       # Get a specific author.
