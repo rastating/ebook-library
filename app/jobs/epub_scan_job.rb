@@ -28,6 +28,7 @@ module EBL
       # @return [EBL::Models::Book] the newly created book.
       def create_book(book_path)
         book = EBL::Models::Book.from_epub(book_path)
+        return nil if book.nil?
 
         if book.valid?
           save_book_and_import_log book
@@ -64,7 +65,9 @@ module EBL
 
         if File.directory?(path)
           if sync_refresh
-            EpubScanJob.new.perform(path)
+            job = EpubScanJob.new
+            job.sync_refresh = true
+            job.perform(path)
           else
             EpubScanJob.perform_async(path)
           end
