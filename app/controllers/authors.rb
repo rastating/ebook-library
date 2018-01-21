@@ -34,7 +34,15 @@ module EBL
       get '/:id/books/covers' do
         author = EBL::Models::Author.first(id: params['id'])
         halt 404 if author.nil?
-        json(author.books.map { |b| "/api/books/#{b.id}/cover/#{b.cover_path}" })
+
+        covers = []
+        author.books.each do |book|
+          unless book.cover_path.to_s.empty?
+            covers.push "/api/books/#{book.id}/cover/#{book.cover_path}"
+          end
+        end
+
+        json covers
       end
     end
   end
