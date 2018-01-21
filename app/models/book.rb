@@ -69,7 +69,14 @@ module EBL
       # @return [EBL::Models::Book] a book model based on the
       #   metadata of an ePub file.
       def self.from_epub(path)
-        epub = EPUBInfo.get(path)
+        epub = nil
+
+        begin
+          epub = EPUBInfo.get(path)
+        rescue EPUBInfo::NotAnEPUBFileError
+          return nil
+        end
+
         book = EBL::Models::Book.new
         book.title = epub.titles[0]
 
