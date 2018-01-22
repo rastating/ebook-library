@@ -27,7 +27,7 @@ module EBL
       get '/:id/books' do
         author = EBL::Models::Author.first(id: params['id'])
         halt 404 if author.nil?
-        json(author.books.map { |b| hashify_book(b) })
+        json(author.books_dataset.order(:title).map { |b| hashify_book(b) })
       end
 
       # Get an array of cover URLs for books by the specified author.
