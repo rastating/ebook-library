@@ -6,7 +6,7 @@ namespace :user do
     User = EBL::Models::User
     users = args[:username].nil? ? User.all : User.where(username: args[:username])
 
-    if users.nil?
+    if users.nil? || users.empty?
       puts 'No users found'
       next
     end
