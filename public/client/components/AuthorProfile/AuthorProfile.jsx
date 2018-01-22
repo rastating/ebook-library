@@ -33,6 +33,13 @@ class AuthorProfile extends React.Component {
     });
   }
 
+  componentDidUpdate () {
+    if (!this.state.hasSelectedBook && this.state.scrollPosition) {
+      window.scrollTo(0, this.state.scrollPosition);
+      this.setState({ scrollPosition: undefined });
+    }
+  }
+
   ensureLoggedIn () {
     this.getSessionState().then(data => {
       if (data.error) {
@@ -65,12 +72,17 @@ class AuthorProfile extends React.Component {
     });
   }
 
+  getScrollPosition () {
+    return window.scrollY || window.scrollTop || document.getElementsByTagName("html")[0].scrollTop;
+  }
+
   onBookSelected (book) {
     this.ensureLoggedIn();
     this.setState({
+      scrollPosition:  this.getScrollPosition(),
       selectedBook:    book,
       hasSelectedBook: true
-    })
+    });
   }
 
   onBookPopupClose () {
