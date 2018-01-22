@@ -94,7 +94,7 @@ module EBL
       # @param subjects [Array] an array of EBL::Models::Subject
       def update_book_subjects(book, subjects)
         book.remove_all_subjects
-        subjects.each { |s| book.add_subject s }
+        subjects.each { |s| book.add_subject(s) if s.valid? }
       end
 
       # Remove the existing identifiers and create the new ones.
