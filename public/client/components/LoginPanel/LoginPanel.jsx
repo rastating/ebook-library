@@ -64,7 +64,7 @@ class LoginPanel extends React.Component {
   render () {
     return (
       <div className="form-signin-container">
-        <div className="form-signin">
+        <form onSubmit={this.login} className="form-signin">
           <div className="text-center mb-4">
             <div className="mb-4 logo p-4 d-inline-block">
               <i className="fas fa-book fa-5x text-white"></i>
@@ -102,7 +102,7 @@ class LoginPanel extends React.Component {
             progressText="Signing in..."
             inProgress={this.state.loggingIn}
             onClick={this.login} />
-        </div>
+        </form>
       </div>
     );
   }
