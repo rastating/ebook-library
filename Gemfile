@@ -2,13 +2,13 @@ source 'https://rubygems.org'
 
 group :db do
   gem 'rake', '~>12.3'
-  gem 'sequel', '~>5.3.0'
+  gem 'sequel', '~>5.4.0'
 end
 
 group :http do
   gem 'sinatra', '~>2.0'
   gem 'sinatra-contrib', '~>2.0'
-  gem 'puma', '~>3.4'
+  gem 'puma', '~>3.11.2'
 end
 
 group :cli do
