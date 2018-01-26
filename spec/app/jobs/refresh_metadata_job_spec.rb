@@ -112,7 +112,7 @@ describe EBL::Jobs::RefreshMetadataJob do
       expect(book.authors.length).to eq 2
 
       subject.book = book
-      subject.update_metadata
+      subject.update_metadata(metadata_dbl)
 
       book = EBL::Models::Book.first(id: 1)
       expect(book.authors.length).to eq 0
@@ -127,7 +127,7 @@ describe EBL::Jobs::RefreshMetadataJob do
       expect(book.dates.length).to eq 2
 
       subject.book = book
-      subject.update_metadata
+      subject.update_metadata(metadata_dbl)
 
       book = EBL::Models::Book.first(id: 1)
       expect(book.dates.length).to eq 0
@@ -142,7 +142,7 @@ describe EBL::Jobs::RefreshMetadataJob do
       expect(book.identifiers.length).to eq 2
 
       subject.book = book
-      subject.update_metadata
+      subject.update_metadata(metadata_dbl)
 
       book = EBL::Models::Book.first(id: 1)
       expect(book.identifiers.length).to eq 0
@@ -157,7 +157,7 @@ describe EBL::Jobs::RefreshMetadataJob do
       expect(book.subjects.length).to eq 2
 
       subject.book = book
-      subject.update_metadata
+      subject.update_metadata(metadata_dbl)
 
       book = EBL::Models::Book.first(id: 1)
       expect(book.subjects.length).to eq 0
@@ -186,7 +186,7 @@ describe EBL::Jobs::RefreshMetadataJob do
       metadata_dbl[:dates] = dates
 
       subject.book = EBL::Models::Book.first(id: 1)
-      subject.update_metadata
+      subject.update_metadata(metadata_dbl)
 
       book = EBL::Models::Book.first(id: 1)
 
@@ -210,6 +210,38 @@ describe EBL::Jobs::RefreshMetadataJob do
 
       book = EBL::Models::Book.first
       expect(book.cover_path).to eq '/new/path/to/cover'
+    end
+  end
+
+  describe '#extract_and_update_metadata' do
+    context 'when the book is a pdf' do
+      it 'extracts the data using #extract_metadata_from_pdf' do
+        invoked = false
+        allow(subject).to receive(:extract_metadata_from_pdf) do
+          invoked = true
+          metadata_dbl
+        end
+
+        subject.book = EBL::Models::Book.first
+        subject.book.path = '/test.pdf'
+        subject.extract_and_update_metadata
+        expect(invoked).to be true
+      end
+    end
+
+    context 'when the book is an epub' do
+      it 'extracts the data using #extract_metadata_from_epub' do
+        invoked = false
+        allow(subject).to receive(:extract_metadata_from_epub) do
+          invoked = true
+          metadata_dbl
+        end
+
+        subject.book = EBL::Models::Book.first
+        subject.book.path = '/test.epub'
+        subject.extract_and_update_metadata
+        expect(invoked).to be true
+      end
     end
   end
 end

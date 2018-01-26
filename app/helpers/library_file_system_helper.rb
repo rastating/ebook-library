@@ -17,6 +17,11 @@ module EBL
         File.extname(filename).casecmp('.epub').zero?
       end
 
+      # @return [Boolean] true if the file extension is pdf.
+      def pdf?(filename)
+        File.extname(filename).casecmp('.pdf').zero?
+      end
+
       # Create a normalised name, suitable for the file system.
       # @param name [String] the name to normalise.
       # @return [String] returns the name with bad characters removed.
@@ -32,9 +37,9 @@ module EBL
         author_path = File.join(library_path, safe_name(book.primary_author))
         FileUtils.mkdir_p author_path
 
-        book_filename = "#{book.id}_#{safe_name(book.title)}.epub"
-        dest_path = File.join(author_path, book_filename)
         src_path = book.path
+        book_filename = "#{book.id}_#{safe_name(book.title)}#{File.extname(src_path)}"
+        dest_path = File.join(author_path, book_filename)
         FileUtils.cp src_path, dest_path
 
         return false unless File.exist?(dest_path)

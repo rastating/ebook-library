@@ -15,14 +15,22 @@ module EBL
       include EBL::Helpers::MetadataHelper
       include EBL::Helpers::CoverHelper
 
-      def update_metadata
-        metadata = extract_metadata_from_epub(book.path)
+      def extract_and_update_metadata
+        metadata = {}
+        if epub?(book.path)
+          metadata = extract_metadata_from_epub(book.path)
+        elsif pdf?(book.path)
+          metadata = extract_metadata_from_pdf(book.path)
+        end
 
+        update_metadata metadata
+      end
+
+      def update_metadata(metadata)
         update_book_authors book, metadata[:authors]
         update_book_dates book, metadata[:dates]
         update_book_identifiers book, metadata[:identifiers]
         update_book_subjects book, metadata[:subjects]
-
         update_book_cover metadata[:cover]
       end
 
@@ -53,7 +61,7 @@ module EBL
         end
 
         return if should_ignore?
-        update_metadata
+        extract_and_update_metadata
         log_green "Refreshed metadata for #{book.title} [#{book.id}]"
       end
 

@@ -4,6 +4,8 @@ require 'app/models/subject'
 require 'app/models/identifier'
 require 'app/models/date'
 
+require 'pdf/reader'
+
 module EBL
   module Models
     # An object representing a book created from an ePub's metadata.
@@ -90,6 +92,36 @@ module EBL
         book.publisher = epub.publisher
         book.drm_protected = epub.drm_protected
         book.epub_version = epub.version.to_s
+        book.update_path_and_refresh_checksum(path)
+        book
+      end
+
+      # Parse a PDF file into an {EBL::Models::Book}.
+      # @param path [String] the path to the PDF file to parse.
+      # @return [EBL::Models::Book] a book model based on the
+      #   metadata of a PDF file.
+      def self.from_pdf(path)
+        pdf = nil
+
+        begin
+          pdf = PDF::Reader.new(path)
+        rescue MalformedPDFError
+          return nil
+        rescue UnsupportedFeatureError
+          return nil
+        end
+
+        book = EBL::Models::Book.new(
+          title: File.basename(path, File.extname(path))
+        )
+
+        unless pdf.info[:Title].nil? || pdf.info[:Title].casecmp('none').zero?
+          book.title = pdf.info[:Title]
+        end
+
+        book.description = 'This book has no description'
+        book.drm_protected = false
+        book.epub_version = 0
         book.update_path_and_refresh_checksum(path)
         book
       end

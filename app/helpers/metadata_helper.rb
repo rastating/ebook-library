@@ -89,6 +89,42 @@ module EBL
         }
       end
 
+      # Extract the author from a {PDF::Reader}.
+      # @param pdf [PDF::Reader] the PDF::Reader instance to extract from.
+      # @return [EBL::Models::Author] the author.
+      def extract_author_from_pdf(pdf)
+        name = 'Unknown'
+        if !pdf.info.nil? && !pdf.info[:Author].to_s.empty?
+          name = pdf.info[:Author]
+        end
+
+        author = EBL::Models::Author.first(name: name)
+        return author unless author.nil?
+        EBL::Models::Author.new(name: name)
+      end
+
+      # Extract the author from a PDF file.
+      # @param path [String] the path of the PDF file.
+      # @return [String] the author name.
+      def extract_author_from_pdf_file(path)
+        pdf = PDF::Reader.new(path)
+        extract_author_from_pdf(pdf)
+      end
+
+      # Extract all usable metadata from a PDF file.
+      # @param path [String] the path to the PDF file.
+      # @return [Hash] a hash containing the metadata.
+      def extract_metadata_from_pdf(path)
+        pdf = PDF::Reader.new(path)
+        {
+          authors:     [extract_author_from_pdf(pdf)],
+          dates:       [],
+          identifiers: [],
+          subjects:    [],
+          cover:       nil
+        }
+      end
+
       # Remove the existing subjects and create the new ones.
       # @param book [EBL::Models::Book] the book to update.
       # @param subjects [Array] an array of EBL::Models::Subject

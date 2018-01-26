@@ -17,6 +17,7 @@ end
 
 group :media do
   gem 'epubinfo', '0.4.4'
+  gem 'pdf-reader', '~>2.0.0'
 end
 
 group :misc  do

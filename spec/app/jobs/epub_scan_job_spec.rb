@@ -18,7 +18,7 @@ describe EBL::Jobs::EpubScanJob do
           logged_error = !/Failed to validate book/.match(p1).nil?
         end
 
-        expect(subject.create_book('/test')).to be_nil
+        expect(subject.create_book('/test', :epub)).to be_nil
         expect(logged_error).to be true
       end
     end
@@ -35,7 +35,7 @@ describe EBL::Jobs::EpubScanJob do
         allow(subject).to receive(:log_error).and_return true
         allow(subject).to receive(:extract_authors_from_epub).and_return []
 
-        result = subject.create_book('/path/to/epub')
+        result = subject.create_book('/path/to/epub', :epub)
 
         expect(result.id).to_not be_nil
         expect(result.title).to eq 'title'
@@ -54,7 +54,7 @@ describe EBL::Jobs::EpubScanJob do
           logged_error = (p1 == 'Failed to import /path/to/epub')
         end
 
-        subject.import_book '/path/to/epub'
+        subject.import_book '/path/to/epub', :epub
         expect(logged_error).to be true
       end
     end
@@ -69,7 +69,7 @@ describe EBL::Jobs::EpubScanJob do
           logged_error = (p1 == 'Failed to import /path/to/epub')
         end
 
-        subject.import_book '/path/to/epub'
+        subject.import_book '/path/to/epub', :epub
         expect(logged_error).to be true
       end
     end
@@ -86,7 +86,7 @@ describe EBL::Jobs::EpubScanJob do
           logged_message = (p1 == 'Imported title [ID:1]')
         end
 
-        subject.import_book '/path/to/epub'
+        subject.import_book '/path/to/epub', :epub
         expect(logged_message).to be true
       end
 
@@ -102,7 +102,7 @@ describe EBL::Jobs::EpubScanJob do
           job_queued = true
         end
 
-        subject.import_book '/path/to/epub'
+        subject.import_book '/path/to/epub', :epub
         expect(job_queued).to be true
       end
     end
@@ -203,6 +203,30 @@ describe EBL::Jobs::EpubScanJob do
 
       subject.perform '/path/to/scan'
       expect(processed).to eq %w[file1 file2]
+    end
+  end
+
+  describe '#initialise_book' do
+    context 'when the type is :epub' do
+      it 'returns a book via Book.from_epub' do
+        dbl = double('Book')
+        allow(EBL::Models::Book).to receive(:from_epub).and_return dbl
+        expect(subject.initialise_book('path', :epub)).to eq dbl
+      end
+    end
+
+    context 'when the type is :pdf' do
+      it 'returns a book via Book.from_pdf' do
+        dbl = double('Book')
+        allow(EBL::Models::Book).to receive(:from_pdf).and_return dbl
+        expect(subject.initialise_book('path', :pdf)).to eq dbl
+      end
+    end
+
+    context 'when the type is not :pdf or :epub' do
+      it 'returns nil' do
+        expect(subject.initialise_book('path', :invalid)).to be_nil
+      end
     end
   end
 end

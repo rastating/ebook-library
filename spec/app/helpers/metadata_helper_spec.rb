@@ -10,9 +10,13 @@ describe EBL::Helpers::MetadataHelper do
 
   let(:epub_dbl) { double('epub') }
 
+  let(:pdf_info) { {} }
+  let(:pdf_dbl)  { double('pdf', info: pdf_info) }
+
   before(:each) do
     allow(epub_dbl).to receive(:cover).and_return nil
     allow(EPUBInfo).to receive(:get).and_return epub_dbl
+    allow(PDF::Reader).to receive(:new).and_return(pdf_dbl)
 
     book = EBL::Models::Book.create(
       title: 'test',
@@ -290,6 +294,32 @@ describe EBL::Helpers::MetadataHelper do
 
       expect(book.dates.length).to eq 1
       expect(book.dates[0].event).to eq 'new_event'
+    end
+  end
+
+  describe '#extract_author_from_pdf' do
+    context 'when there is no author' do
+      it 'returns Unknown' do
+        expect(subject.extract_author_from_pdf(pdf_dbl).name).to eq 'Unknown'
+      end
+    end
+
+    context 'when an author exists' do
+      let(:pdf_info) { { Author: 'test' } }
+      it 'returns the author' do
+        expect(subject.extract_author_from_pdf(pdf_dbl).name).to eq 'test'
+      end
+    end
+  end
+
+  describe '#extract_metadata_from_pdf' do
+    it 'returns an array of metadata from the PDF' do
+      data = subject.extract_metadata_from_pdf(pdf_dbl)
+      expect(data[:authors][0].name).to eq 'Unknown'
+      expect(data[:dates]).to eq []
+      expect(data[:identifiers]).to eq []
+      expect(data[:subjects]).to eq []
+      expect(data[:cover]).to be_nil
     end
   end
 end

@@ -17,21 +17,33 @@ module EBL
       include EBL::Helpers::LibraryFileSystemHelper
       include EBL::Helpers::MetadataHelper
 
-      def save_book_and_import_log(book)
+      # Save a book and its authors and add an entry to the import log.
+      # @param book [EBL::Models::Book] the book to save.
+      # @param type [Symbol] :epub or :pdf based on the book type.
+      def save_book_and_import_log(book, type)
         book.save
-        extract_authors_from_epub(book.path).each { |a| book.add_author(a) }
+
+        authors = []
+        if type == :epub
+          authors = extract_authors_from_epub(book.path)
+        elsif type == :pdf
+          authors == [extract_author_from_pdf_file(book.path)]
+        end
+
+        authors.each { |a| book.add_author(a) }
         EBL::Models::ImportLog.create(path: book.path, book_id: book.id)
       end
 
       # Create and save a new book in the database.
-      # @param book_path [String] the path to the ePub file.
+      # @param book_path [String] the path to the book to import.
+      # @param type [Symbol] :pdf or :epub depending on the book type.
       # @return [EBL::Models::Book] the newly created book.
-      def create_book(book_path)
-        book = EBL::Models::Book.from_epub(book_path)
+      def create_book(book_path, type)
+        book = initialise_book(book_path, type)
         return nil if book.nil?
 
         if book.valid?
-          save_book_and_import_log book
+          save_book_and_import_log book, type
           return book
         else
           log_error "Failed to validate book: #{book.errors.to_json}"
@@ -39,9 +51,23 @@ module EBL
         end
       end
 
+      # Initialise a new book based on the file type.
+      # @param book_path [String] the path to the book to initialise.
+      # @param type [Symbol] :pdf or :epub depending on the book type.
+      # @return [EBL::Models::Book] the book, or nil if an error occurs.
+      def initialise_book(book_path, type)
+        if type == :epub
+          EBL::Models::Book.from_epub(book_path)
+        elsif type == :pdf
+          EBL::Models::Book.from_pdf(book_path)
+        end
+      end
+
       # Import the book into the database and queue a metadata refresh.
-      def import_book(book_path)
-        book = create_book(book_path)
+      # @param book_path [String] the path to the book to import.
+      # @param type [Symbol] :pdf or :epub depending on the book type.
+      def import_book(book_path, type)
+        book = create_book(book_path, type)
 
         if book.nil? || !copy_book_to_library(book)
           log_error "Failed to import #{book_path}"
@@ -49,12 +75,7 @@ module EBL
         end
 
         log_green "Imported #{book.title} [ID:#{book.id}]"
-
-        if sync_refresh
-          EBL::Jobs::RefreshMetadataJob.new.perform(book.id, true)
-        else
-          EBL::Jobs::RefreshMetadataJob.perform_async(book.id, true)
-        end
+        spawn_new_refresh_job book.id
       end
 
       # Process the specified path by queuing a scan job if it is
@@ -64,15 +85,35 @@ module EBL
         path = File.join(scan_path, name)
 
         if File.directory?(path)
-          if sync_refresh
-            job = EpubScanJob.new
-            job.sync_refresh = true
-            job.perform(path)
-          else
-            EpubScanJob.perform_async(path)
-          end
-        elsif epub?(path) && !EBL::Models::ImportLog.imported?(path)
-          import_book path
+          spawn_new_scan_job path
+        elsif EBL::Models::ImportLog.imported?(path)
+          return
+        elsif epub?(path)
+          import_book path, :epub
+        elsif pdf?(path)
+          import_book path, :pdf
+        end
+      end
+
+      # Spawn a new scan job for the specified path.
+      # @param path [String] the path to scan.
+      def spawn_new_scan_job(path)
+        if sync_refresh
+          job = EpubScanJob.new
+          job.sync_refresh = true
+          job.perform(path)
+        else
+          EpubScanJob.perform_async(path)
+        end
+      end
+
+      # Spawn a new job to refresh a book's metadata.
+      # @param book_id [Integer] the ID of the book to refresh.
+      def spawn_new_refresh_job(book_id)
+        if sync_refresh
+          EBL::Jobs::RefreshMetadataJob.new.perform(book_id, true)
+        else
+          EBL::Jobs::RefreshMetadataJob.perform_async(book_id, true)
         end
       end
 

@@ -14,7 +14,7 @@ describe EBL::Helpers::LibraryFileSystemHelper do
       id: 99,
       title: 'title',
       primary_author: 'author!',
-      path: '/original/path'
+      path: '/original/path/book.epub'
     )
   end
 
@@ -31,6 +31,14 @@ describe EBL::Helpers::LibraryFileSystemHelper do
       expect(subject.epub?('test.epub')).to be true
       expect(subject.epub?('test..doc..epub')).to be true
       expect(subject.epub?('test.doc')).to be false
+    end
+  end
+
+  describe '#pdf?' do
+    it 'returns true if the extension of filename is .pdf' do
+      expect(subject.pdf?('test.pdf')).to be true
+      expect(subject.pdf?('test..doc..pdf')).to be true
+      expect(subject.pdf?('test.doc')).to be false
     end
   end
 

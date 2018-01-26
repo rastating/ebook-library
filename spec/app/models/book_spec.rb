@@ -3,6 +3,7 @@ require 'app/models/book'
 
 describe EBL::Models::Book, type: :model do
   let(:subject) { described_class.new }
+
   let(:epub_dbl) do
     double(
       'epub',
@@ -16,6 +17,9 @@ describe EBL::Models::Book, type: :model do
     )
   end
 
+  let(:pdf_info) { {} }
+  let(:pdf_dbl)  { double('pdf', info: pdf_info) }
+
   before(:each) do
     EBL::Models::Book.create(
       title:         'test',
@@ -24,6 +28,8 @@ describe EBL::Models::Book, type: :model do
       path:          '/test',
       checksum:      'test'
     )
+
+    allow(PDF::Reader).to receive(:new).and_return(pdf_dbl)
   end
 
   it { is_expected.to have_many_to_many :authors }
@@ -189,6 +195,30 @@ describe EBL::Models::Book, type: :model do
 
       subject = EBL::Models::Book.from_epub('/test')
       expect(subject.description).to eq 'This book has no description'
+    end
+  end
+
+  describe '.from_pdf' do
+    context 'when no title exists in the metadata' do
+      it 'sets the title of the book to the basename of the file' do
+        subject = described_class.from_pdf('/path/to/test.fake.ext.pdf')
+        expect(subject.title).to eq 'test.fake.ext'
+      end
+    end
+
+    context 'when a title exists in the metadata' do
+      let(:pdf_info) { { Title: 'stored title' } }
+      it 'sets the title of the book using the title stored in the PDF' do
+        subject = described_class.from_pdf('/path/to/test.pdf')
+        expect(subject.title).to eq 'stored title'
+      end
+    end
+
+    it 'sets the required fields that cannot be populated with preset values' do
+      subject = described_class.from_pdf('/test.pdf')
+      expect(subject.description).to eq 'This book has no description'
+      expect(subject.drm_protected).to be false
+      expect(subject.epub_version.to_s).to eq '0'
     end
   end
 end
