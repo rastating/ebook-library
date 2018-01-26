@@ -115,7 +115,7 @@ module EBL
           title: File.basename(path, File.extname(path))
         )
 
-        unless pdf.info[:Title].nil? || pdf.info[:Title].casecmp('none').zero?
+        unless pdf.info.nil? || pdf.info[:Title].nil? || pdf.info[:Title].casecmp('none').zero?
           book.title = pdf.info[:Title]
         end
 
