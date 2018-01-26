@@ -2,7 +2,7 @@ E-book Library
 ==============
 [![Build Status](https://travis-ci.org/rastating/ebook-library.svg?branch=master)](https://travis-ci.org/rastating/ebook-library) [![Maintainability](https://api.codeclimate.com/v1/badges/0b4517bea3dc3e388450/maintainability)](https://codeclimate.com/github/rastating/ebook-library/maintainability) [![Dependency Status](https://gemnasium.com/badges/github.com/rastating/ebook-library.svg)](https://gemnasium.com/github.com/rastating/ebook-library)
 
-E-book Library is a small web application powered by Sinatra and React, which will organise and provide access to a library of ePub documents.
+E-book Library is a small web application powered by Sinatra and React, which will organise and provide access to a library of ePub and PDF documents.
 
 Quick Start
 -----------
