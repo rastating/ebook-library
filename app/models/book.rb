@@ -115,8 +115,12 @@ module EBL
           title: File.basename(path, File.extname(path))
         )
 
-        unless pdf.info.nil? || pdf.info[:Title].nil? || pdf.info[:Title].casecmp('none').zero?
-          book.title = pdf.info[:Title]
+        begin
+          unless pdf.info.nil? || pdf.info[:Title].nil? || pdf.info[:Title].casecmp('none').zero?
+            book.title = pdf.info[:Title]
+          end
+        rescue PDF::Reader::EncryptedPDFError
+          return nil
         end
 
         book.description = 'This book has no description'
