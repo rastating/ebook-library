@@ -21,7 +21,11 @@ module EBL
       # @param book [EBL::Models::Book] the book to save.
       # @param type [Symbol] :epub or :pdf based on the book type.
       def save_book_and_import_log(book, type)
-        book.save
+        begin
+          book.save
+        rescue Sequel::DatabaseError
+          return nil
+        end
 
         authors = []
         if type == :epub
@@ -43,7 +47,7 @@ module EBL
         return nil if book.nil?
 
         if book.valid?
-          save_book_and_import_log book, type
+          return nil if save_book_and_import_log(book, type).nil?
           return book
         else
           log_error "Failed to validate book: #{book.errors.to_json}"
