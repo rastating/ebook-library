@@ -6,9 +6,9 @@ group :db do
 end
 
 group :http do
-  gem 'sinatra', '~>2.0'
-  gem 'sinatra-contrib', '~>2.0'
   gem 'puma', '~>3.11.2'
+  gem 'sinatra', '~>2.0.1'
+  gem 'sinatra-contrib', '~>2.0.1'
 end
 
 group :cli do
@@ -20,9 +20,9 @@ group :media do
   gem 'pdf-reader', '~>2.0.0'
 end
 
-group :misc  do
-  gem 'sucker_punch', '~> 2.0'
+group :misc do
   gem 'bcrypt', '~> 3.1.11'
+  gem 'sucker_punch', '~> 2.0'
 end
 
 group :development do
