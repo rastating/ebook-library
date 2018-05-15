@@ -19,7 +19,9 @@ class LoginPanel extends React.Component {
     this.login = this.login.bind(this);
   }
 
-  login () {
+  login (e) {
+    e.preventDefault()
+
     this.setState({
       failedLogin: false,
       loggingIn: true
