@@ -1,6 +1,6 @@
 E-book Library
 ==============
-[![Build Status](https://travis-ci.org/rastating/ebook-library.svg?branch=master)](https://travis-ci.org/rastating/ebook-library) [![Maintainability](https://api.codeclimate.com/v1/badges/0b4517bea3dc3e388450/maintainability)](https://codeclimate.com/github/rastating/ebook-library/maintainability) [![Dependency Status](https://gemnasium.com/badges/github.com/rastating/ebook-library.svg)](https://gemnasium.com/github.com/rastating/ebook-library)
+[![Build Status](https://travis-ci.org/rastating/ebook-library.svg?branch=master)](https://travis-ci.org/rastating/ebook-library) [![Maintainability](https://api.codeclimate.com/v1/badges/0b4517bea3dc3e388450/maintainability)](https://codeclimate.com/github/rastating/ebook-library/maintainability) [![Coverage Status](https://coveralls.io/repos/github/rastating/ebook-library/badge.svg?branch=master)](https://coveralls.io/github/rastating/ebook-library?branch=master)
 
 E-book Library is a small web application powered by Sinatra and React, which will organise and provide access to a library of ePub and PDF documents.
 
@@ -68,7 +68,7 @@ rake author:merge[10,3]
 
 Other Tasks
 -----------
-In addition to the rake tasks documented above, there are a number of other tasks to carry out miscellaneous operations; all of which are quite self explanitory. A list of tasks can be viewed from the terminal by running `rake -T` within the `ebook-library` directory. Alternatively, the list can also be found below:
+In addition to the rake tasks documented above, there are a number of other tasks to carry out miscellaneous operations; all of which are quite self explanatory. A list of tasks can be viewed from the terminal by running `rake -T` within the `ebook-library` directory. Alternatively, the list can also be found below:
 
 Task                           | Description
 -------------------------------|-------------------------------------
