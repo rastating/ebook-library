@@ -4,3 +4,6 @@ db/covers/**/*
 
 \.rake_tasks~
 node_modules
+
+# Coveralls generated files
+coverage/
