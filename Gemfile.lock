@@ -32,7 +32,7 @@ GEM
     minitest (5.11.3)
     multi_json (1.13.1)
     mustermann (1.0.2)
-    nokogiri (1.8.1)
+    nokogiri (1.8.3)
       mini_portile2 (~> 2.3.0)
     pdf-reader (2.1.0)
       Ascii85 (~> 1.0.0)
